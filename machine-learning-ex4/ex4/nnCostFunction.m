@@ -62,7 +62,7 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
-
+% 1.3 solution
 a1 = [ones(m,1) X];
 a2 = [ones(m,1) sigmoid(a1 * Theta1')];
 h = sigmoid(a2 * Theta2');
@@ -74,7 +74,36 @@ cost = -yVec .* log(h) - (1 - yVec) .* log(1 - h);
 J = (1 / m) * sum(sum(cost));
 
 
+% 1.4 solution
 
+theta1ExcludingBias = Theta1(:, 2:end);
+theta2ExcludingBias = Theta2(:, 2:end);
+
+reg1 = sum(sum(theta1ExcludingBias .^ 2));
+reg2 = sum(sum(theta2ExcludingBias .^ 2));
+
+J = (1 / m) * sum(sum(cost)) + (lambda / (2 * m)) * (reg1 + reg2);
+
+delta1 = zeros(size(Theta1));
+delta2 = zeros(size(Theta2));
+
+for t = 1:m,
+
+	h1t = h(t, :)';
+	a1t = a1(t,:)';
+	a2t = a2(t, :)';
+	yVect = yVec(t, :)';
+
+	d3t = h1t - yVect;
+	z2t = [1; Theta1 * a1t];
+    d2t = Theta2' * d3t .* sigmoidGradient(z2t);
+
+    delta1 = delta1 + d2t(2:end) * a1t';
+    delta2 = delta2 + d3t * a2t';
+end;
+
+Theta1_grad = (1 / m) * delta1;
+Theta2_grad = (1 / m) * delta2;
 
 
 

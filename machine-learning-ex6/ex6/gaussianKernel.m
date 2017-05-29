@@ -16,11 +16,15 @@ sim = 0;
 %
 %
 
+diffX1X2 = (x1 - x2) .^ 2;
+sumDiffX1X2 = sum(sum(diffX1X2));
+
+sigmaTwice = 2 * (sigma^2);
 
 
-
+sim = exp( - (sumDiffX1X2 / sigmaTwice) );
 
 
 % =============================================================
-    
+
 end
